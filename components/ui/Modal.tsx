@@ -71,7 +71,7 @@ export default function Modal({
                     onClick={() => setIsOpen(false)}
                   />
                 </div>
-                <div className="p-10">{children}</div>
+                <div className="p-5">{children}</div>
               </div>
             ) : (
               <div />

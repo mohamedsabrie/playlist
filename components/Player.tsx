@@ -53,12 +53,12 @@ function Player() {
     });
   };
   useEffect(() => {
-    if (volume > 0 && volume < 100) {
+    if (volume > 0 && volume < 100 && spotifyApi.getAccessToken()) {
       handleVolumeRange(volume);
     }
   }, [volume]);
   useEffect(() => {
-    if (spotifyApi.getAccessToken() && !currentTrackId) {
+    if (spotifyApi.getAccessToken()) {
       fetchCurrentSong();
       setVolume(50);
     }
