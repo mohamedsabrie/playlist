@@ -53,7 +53,7 @@ export default function Modal({
           >
             {isOpen ? (
               <div
-                className={`inline-block w-[300px] sm:w-[540px] 
+                className={` inline-block w-[300px] sm:w-[540px] 
                 bg-[#3E3E3E]  rounded-lg  overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle   `}
               >
                 <div className="flex justify-between items-center p-4 ">

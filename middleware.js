@@ -5,6 +5,8 @@ export async function middleware(req) {
     req,
     secret: process.env.JWT_SECRET,
   });
+
+  console.log(token)
   const { pathname } = req.nextUrl;
   const PUBLIC_FILE = /\.(.*)$/;
   if (

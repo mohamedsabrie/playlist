@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Songs from "@/components/Songs";
 import Player from "@/components/Player";
+import Controls from "@/components/Controls";
 
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <Sidebar />
       <main className="flex-1 pb-32 ">
         <Hero />
+        <Controls />
         <Songs />
       </main>
       <div className="fixed bottom-0 w-full ">
