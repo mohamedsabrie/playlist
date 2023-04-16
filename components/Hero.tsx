@@ -6,6 +6,8 @@ import {
 import useSpotify from "@/hooks/useSpotify";
 import { MusicalNoteIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { toast } from "react-toastify";
+
 
 import React, { useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -23,7 +25,9 @@ function Hero() {
           setPlaylist(data?.body);
         })
         .catch((err: any) => {
-          console.log("something went wrong", err);
+          toast.error("Something went wrong!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         });
     }
   }, [playlistId, setPlaylist, spotifyApi]);

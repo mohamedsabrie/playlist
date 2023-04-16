@@ -1,4 +1,5 @@
 import useSpotify from "./useSpotify";
+import { toast } from "react-toastify";
 
 export default function useSpotifyActions() {
   const spotifyApi = useSpotify();
@@ -19,7 +20,9 @@ export default function useSpotifyActions() {
           console.log("Created playlist!");
         },
         function (err: any) {
-          console.log("Something went wrong!", err);
+          toast.error("Something went wrong!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         }
       );
   };

@@ -15,6 +15,7 @@ import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { debounce } from "lodash";
+import { toast } from "react-toastify";
 
 function Player() {
   const spotifyApi = useSpotify();
@@ -23,16 +24,19 @@ function Player() {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdAtom);
   const [volume, setVolume] = useState<number>(50);
-  const songInfo:any = useSongInfo();
-  console.log(songInfo);
+  const songInfo: any = useSongInfo();
 
   const handlePlayPause = () => {
-    spotifyApi.getMyCurrentPlaybackState().then((data:any) => {
+    spotifyApi.getMyCurrentPlaybackState().then((data: any) => {
       if (data?.body?.is_playing) {
         spotifyApi.pause();
         setIsPlaying(false);
       } else {
-        spotifyApi.play();
+        spotifyApi.play().catch((err:any) => {
+          toast.error(err.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        });
         setIsPlaying(true);
       }
     });
@@ -45,10 +49,10 @@ function Player() {
   );
 
   const fetchCurrentSong = () => {
-    spotifyApi.getMyCurrentPlayingTrack().then((data:any) => {
+    spotifyApi.getMyCurrentPlayingTrack().then((data: any) => {
       setCurrentTrackId(data?.body?.item?.id);
     });
-    spotifyApi.getMyCurrentPlaybackState().then((data:any) => {
+    spotifyApi.getMyCurrentPlaybackState().then((data: any) => {
       setIsPlaying(data?.body?.is_playing);
     });
   };
@@ -90,9 +94,11 @@ function Player() {
               function () {
                 console.log("Skip to previous");
               },
-              function (err:any) {
+              function (err: any) {
                 //if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-                console.log("Something went wrong!", err);
+                toast.error("Something went wrong!", {
+                  position: toast.POSITION.TOP_CENTER,
+                });
               }
             )
           }
@@ -116,9 +122,11 @@ function Player() {
               function () {
                 console.log("Skip to next");
               },
-              function (err:any) {
+              function (err: any) {
                 //if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-                console.log("Something went wrong!", err);
+                toast.error("Something went wrong!", {
+                  position: toast.POSITION.TOP_CENTER,
+                });
               }
             )
           }
@@ -129,7 +137,7 @@ function Player() {
       <div className="flex justify-end items-center space-x-4">
         <SpeakerWaveIcon
           onClick={() =>
-            setVolume((prev:any) => {
+            setVolume((prev: any) => {
               if (prev > 0 && prev < 100) {
                 return prev + 10;
               }

@@ -30,7 +30,9 @@ function SongControlsOptions({ uri, closeMenu, openAddModal }: any) {
               setPlayList(data?.body);
             })
             .catch((err: any) => {
-              console.log("something went wrong", err);
+              toast.error("Something went wrong!", {
+                position: toast.POSITION.TOP_CENTER,
+              });
             });
         },
         function (err: any) {
