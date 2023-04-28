@@ -32,7 +32,7 @@ function Sidebar() {
   return (
     <>
       {createPlaylistModal}
-      <div className="bg-black p-5  min-h-screen col-span-2">
+      <div className="bg-blac  p-5 sticky left-0 top-0  min-h-screen ">
         <Image
           className="mb-5"
           alt="spotify-logo"

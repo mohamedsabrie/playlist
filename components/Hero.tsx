@@ -8,7 +8,6 @@ import { MusicalNoteIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { toast } from "react-toastify";
 
-
 import React, { useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -34,7 +33,7 @@ function Hero() {
 
   return (
     <div className="flex flex-col justify-end bg-gradient-to-b from-gray-800 to-black h-80 text-white p-8">
-      {playlist ? (
+      {playlist && playlist?.images?.name ? (
         <div className="flex space-x-4">
           {playlist?.images?.[0]?.url ? (
             <Image
@@ -68,7 +67,7 @@ function Hero() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-warp  space-x-4">
+        <div className="flex overflow-x-auto scrollbar-hide   space-x-4">
           {playlists?.map((item: any) => {
             return item?.images?.[0]?.url ? (
               <Image
@@ -81,11 +80,13 @@ function Hero() {
                 src={item?.images?.[0]?.url}
               />
             ) : (
-              <div
-                onClick={() => setPlaylistId(item?.id)}
-                className="cursor-pointer w-[192px] h-[192px] bg-gray-800 flex items-center justify-center"
-              >
-                <MusicalNoteIcon className="h-10 text-gray-600" />
+              <div>
+                <div
+                  onClick={() => setPlaylistId(item?.id)}
+                  className="cursor-pointer w-[192px] h-[192px] bg-gray-800 flex items-center justify-center"
+                >
+                  <MusicalNoteIcon className="h-10 text-gray-600" />
+                </div>
               </div>
             );
           })}

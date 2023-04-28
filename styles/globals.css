@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base{
+  body{
+    @apply min-w-[768px] scrollbar-hide;
+
+  }
+}
+
 @layer components {
   .primary-btn {
     @apply bg-primary text-white px-5 py-3 rounded-full;

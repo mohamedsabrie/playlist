@@ -9,6 +9,10 @@ export const playlistAtom = atom({
   key: "playlistAtom",
   default: null,
 });
+export const pageOffsetAtom = atom({
+  key: "pageOffsetAtom",
+  default: 0,
+});
 export const playlistsAtom = atom({
   key: "playlistsAtom",
   default: [],

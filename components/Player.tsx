@@ -16,8 +16,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import handleErrors from "@/lib/handleErrors";
 
 function Player() {
+  const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session, status } = useSession();
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingAtom);
@@ -32,12 +35,22 @@ function Player() {
         spotifyApi.pause();
         setIsPlaying(false);
       } else {
-        spotifyApi.play().catch((err:any) => {
-          toast.error(err.message, {
-            position: toast.POSITION.TOP_CENTER,
+        spotifyApi
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((err: any) => {
+            const error = err.body.error;
+            if (error.status == 404 && error.reason == "NO_ACTIVE_DEVICE") {
+              toast.info(
+                "No active device found, Please open your spotify and play a song",
+                {
+                  position: toast.POSITION.TOP_CENTER,
+                }
+              );
+            }
           });
-        });
-        setIsPlaying(true);
       }
     });
   };
@@ -49,9 +62,14 @@ function Player() {
   );
 
   const fetchCurrentSong = () => {
-    spotifyApi.getMyCurrentPlayingTrack().then((data: any) => {
-      setCurrentTrackId(data?.body?.item?.id);
-    });
+    spotifyApi
+      .getMyCurrentPlayingTrack()
+      .then((data: any) => {
+        setCurrentTrackId(data?.body?.item?.id);
+      })
+      .catch((err: any) => {
+        handleErrors({ err, router });
+      });
     spotifyApi.getMyCurrentPlaybackState().then((data: any) => {
       setIsPlaying(data?.body?.is_playing);
     });
@@ -66,18 +84,21 @@ function Player() {
       fetchCurrentSong();
       setVolume(50);
     }
-  }, [currentTrackId, spotifyApi, session]);
+  }, [spotifyApi, session]);
 
   return (
     <div className="h-24 text-white  bg-gradient-to-t from-black to-gray-900 grid grid-cols-3 px-2 md:px-8 text-xs md:text-base">
       <div className="flex items-center space-x-3">
-        <Image
-          height={50}
-          width={50}
-          className="hidden md:inline"
-          src={songInfo?.album?.images?.[0]?.url}
-          alt=""
-        />
+        {songInfo?.album?.images?.[0]?.url && (
+          <Image
+            height={50}
+            width={50}
+            className=""
+            src={songInfo?.album?.images?.[0]?.url}
+            alt=""
+          />
+        )}
+
         <div className="flex flex-col">
           <p className="font-semibold">{songInfo?.name}</p>
           <p className="text-gray-400 text-xs font-medium">
@@ -87,52 +108,62 @@ function Player() {
       </div>
 
       <div className="flex justify-center  items-center space-x-10">
-        <ArrowsRightLeftIcon className="playBtn" />
-        <BackwardIcon
-          onClick={() =>
-            spotifyApi.skipToPrevious().then(
-              function () {
-                console.log("Skip to previous");
-              },
-              function (err: any) {
-                //if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-                toast.error("Something went wrong!", {
-                  position: toast.POSITION.TOP_CENTER,
-                });
-              }
-            )
-          }
-          className="playBtn"
-        />
-        {isPlaying ? (
-          <PauseCircleIcon
-            onClick={handlePlayPause}
-            className="playBtn w-10 h-10"
+        <div>
+          <ArrowsRightLeftIcon className="playBtn" />
+        </div>
+        <div>
+          <BackwardIcon
+            onClick={() =>
+              spotifyApi.skipToPrevious().then(
+                function () {
+                  console.log("Skip to previous");
+                },
+                function (err: any) {
+                  //if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+                  toast.error("Something went wrong!", {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                }
+              )
+            }
+            className="playBtn"
           />
-        ) : (
-          <PlayCircleIcon
-            onClick={handlePlayPause}
-            className="playBtn w-10 h-10"
-          />
-        )}
+        </div>
+        <div>
+          {isPlaying ? (
+            <PauseCircleIcon
+              onClick={handlePlayPause}
+              className="playBtn w-10 h-10"
+            />
+          ) : (
+            <PlayCircleIcon
+              onClick={handlePlayPause}
+              className="playBtn w-10 h-10"
+            />
+          )}
+        </div>
 
-        <ForwardIcon
-          onClick={() =>
-            spotifyApi.skipToNext().then(
-              function () {
-                console.log("Skip to next");
-              },
-              function (err: any) {
-                //if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-                toast.error("Something went wrong!", {
-                  position: toast.POSITION.TOP_CENTER,
-                });
-              }
-            )
-          }
-          className="playBtn "
-        />
-        <ArrowPathRoundedSquareIcon className="playBtn" />
+        <div>
+          <ForwardIcon
+            onClick={() =>
+              spotifyApi.skipToNext().then(
+                function () {
+                  console.log("Skip to next");
+                },
+                function (err: any) {
+                  //if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+                  toast.error("Something went wrong!", {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                }
+              )
+            }
+            className="playBtn "
+          />
+        </div>
+        <div>
+          <ArrowPathRoundedSquareIcon className="playBtn" />
+        </div>
       </div>
       <div className="flex justify-end items-center space-x-4">
         <SpeakerWaveIcon

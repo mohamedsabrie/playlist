@@ -10,10 +10,13 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import ControlsOptions from "./ControlsOptions";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useCreatePlaylist from "@/hooks/useCreatePlaylist";
-import { toast } from "react-toastify";
+import SearchSong from "./SearchSong";
+import handleErrors from "@/lib/handleErrors";
+import { useRouter } from "next/router";
 
 function Controls() {
   const spotifyApi = useSpotify();
+  const router = useRouter();
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingAtom);
   const [show, setShow] = useState(false);
   const optionsRef = useRef(null);
@@ -30,51 +33,56 @@ function Controls() {
         spotifyApi.pause();
         setIsPlaying(false);
       } else {
-        spotifyApi.play().catch((err: any) => {
-          toast.error(err.message, {
-            position: toast.POSITION.TOP_CENTER,
+        spotifyApi
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((err: any) => {
+            handleErrors({ err, router });
           });
-        });
-        setIsPlaying(true);
       }
     });
   };
   return (
     <>
       {createPlaylistModal}
-      <div className="px-10 flex items-center space-x-5">
-        {isPlaying ? (
-          <PauseCircleIcon
-            onClick={handlePlayPause}
-            className="text-primary h-16 cursor-pointer"
-          />
-        ) : (
-          <PlayCircleIcon
-            onClick={handlePlayPause}
-            className="text-primary h-16 cursor-pointer"
-          />
-        )}
-        {!!playlist && (
-          <div className="relative">
-            <EllipsisHorizontalIcon
-              onClick={() => setShow(true)}
-              className="h-10 text-gray-400 cursor-pointer"
+      <div className="flex items-center justify-between px-10">
+        <div className=" flex items-center space-x-5">
+          {isPlaying ? (
+            <PauseCircleIcon
+              onClick={handlePlayPause}
+              className="text-primary h-16 cursor-pointer"
             />
-            <div
-              className="absolute left-0 top-0  min-w-[200px]    bg-dark2"
-              ref={optionsRef}
-            >
-              {show && (
-                <ControlsOptions
-                  openCreatePlaylist={() => {
-                    openCreatePlaylist();
-                    setShow(false);
-                  }}
-                />
-              )}
+          ) : (
+            <PlayCircleIcon
+              onClick={handlePlayPause}
+              className="text-primary h-16 cursor-pointer"
+            />
+          )}
+          {!!playlist && (
+            <div className="relative">
+              <EllipsisHorizontalIcon
+                onClick={() => setShow(true)}
+                className="h-10 text-gray-400 cursor-pointer"
+              />
+              <div
+                className="absolute left-0 top-0  min-w-[200px]    bg-dark2"
+                ref={optionsRef}
+              >
+                {show && (
+                  <ControlsOptions
+                    openCreatePlaylist={() => {
+                      openCreatePlaylist();
+                      setShow(false);
+                    }}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        <SearchSong />
       </div>
     </>
   );
