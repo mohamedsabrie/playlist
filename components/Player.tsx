@@ -21,6 +21,8 @@ import handleErrors from "@/lib/handleErrors";
 
 function Player() {
   const router = useRouter();
+  const [shuffleIsOn, setShuffleIsOn] = useState(false);
+  const [repeatIsOn, setRepeatIsOn] = useState("off");
   const spotifyApi = useSpotify();
   const { data: session, status } = useSession();
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingAtom);
@@ -60,6 +62,29 @@ function Player() {
     }, 500),
     []
   );
+
+  const toggleShuffle = () => {
+    spotifyApi.setShuffle(!shuffleIsOn).then(
+      function () {
+        setShuffleIsOn((prev) => !prev);
+        console.log("Shuffle is on.");
+      },
+      function (err: any) {
+        handleErrors({ err, router });
+      }
+    );
+  };
+  const handleRepeat = () => {
+    const mode = repeatIsOn == "track" ? "off" : "track";
+    spotifyApi.setRepeat(mode).then(
+      function () {
+        setRepeatIsOn(mode);
+      },
+      function (err: any) {
+        handleErrors({ err, router });
+      }
+    );
+  };
 
   const fetchCurrentSong = () => {
     spotifyApi
@@ -109,7 +134,10 @@ function Player() {
 
       <div className="flex justify-center  items-center space-x-10">
         <div>
-          <ArrowsRightLeftIcon className="playBtn" />
+          <ArrowsRightLeftIcon
+            onClick={toggleShuffle}
+            className={`playBtn ${shuffleIsOn ? "text-primary" : ""}`}
+          />
         </div>
         <div>
           <BackwardIcon
@@ -162,7 +190,12 @@ function Player() {
           />
         </div>
         <div>
-          <ArrowPathRoundedSquareIcon className="playBtn" />
+          <ArrowPathRoundedSquareIcon
+            onClick={handleRepeat}
+            className={`playBtn ${
+              repeatIsOn == "track" ? "text-primary" : ""
+            } `}
+          />
         </div>
       </div>
       <div className="flex justify-end items-center space-x-4">

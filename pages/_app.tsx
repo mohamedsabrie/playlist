@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
 import { ToastContainer } from "react-toastify";
+import Head from "next/head";
 
 export default function App({
   Component,
@@ -11,6 +12,9 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
+      <Head>
+        <title>Playlist</title>
+      </Head>
       <RecoilRoot>
         <ToastContainer />
         <Component {...pageProps} />

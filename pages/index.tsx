@@ -9,7 +9,7 @@ import Controls from "@/components/Controls";
 export default function Home() {
   const { data: session, status } = useSession();
   return (
-    <div className="grid h-screen  bg-black">
+    <div className="relative  grid h-screen  bg-black">
       <Header />
       <div className="flex   overflow-y-scroll scrollbar-hide  ">
         <Sidebar />

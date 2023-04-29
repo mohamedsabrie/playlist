@@ -15,11 +15,18 @@ export default function handleErrors({
         position: toast.POSITION.TOP_CENTER,
       }
     );
-  }
-  if (
+  } else if (
     error.status == 401 &&
     error.message == "The access token expired"
   ) {
     router.push("/login");
+  } else if (error.status == 403) {
+    toast.info("Please open a spotify premium account to enjoy the features", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  } else {
+    toast.error("Something went wrong", {
+      position: toast.POSITION.TOP_CENTER,
+    });
   }
 }

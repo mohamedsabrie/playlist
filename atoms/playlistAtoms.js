@@ -25,3 +25,7 @@ export const currentTrackIdAtom = atom({
   key: "currentTrackIdAtom",
   default: null,
 });
+export const searchValueAtom = atom({
+  key: "searchValueAtom",
+  default: "",
+});

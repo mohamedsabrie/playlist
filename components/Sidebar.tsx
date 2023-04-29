@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import useSpotify from "@/hooks/useSpotify";
-import { useRecoilState } from "recoil";
-import { playlistIdAtom, playlistsAtom } from "../atoms/playlistAtoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  playlistIdAtom,
+  playlistsAtom,
+  searchValueAtom,
+} from "../atoms/playlistAtoms";
 import Image from "next/image";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import useCreatePlaylist from "@/hooks/useCreatePlaylist";
@@ -12,6 +16,7 @@ function Sidebar() {
   const [playlists, setPlaylists] = useRecoilState(playlistsAtom);
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdAtom);
   const { createPlaylistModal, openCreatePlaylist } = useCreatePlaylist();
+  const setSearchValue = useSetRecoilState<string>(searchValueAtom);
   const hasFetched = useRef(false);
   useEffect(() => {
     if (
@@ -54,7 +59,10 @@ function Sidebar() {
           {playlists?.map((item: any) => (
             <p
               key={item?.id}
-              onClick={() => setPlaylistId(item?.id)}
+              onClick={() => {
+                setPlaylistId(item?.id);
+                setSearchValue("");
+              }}
               className="text-gray-400 cursor-pointer hover:text-gray-300"
             >
               {item?.name}

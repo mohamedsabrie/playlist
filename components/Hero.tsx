@@ -33,7 +33,7 @@ function Hero() {
 
   return (
     <div className="flex flex-col justify-end bg-gradient-to-b from-gray-800 to-black h-80 text-white p-8">
-      {playlist && playlist?.images?.name ? (
+      {playlist && playlist?.name ? (
         <div className="flex space-x-4">
           {playlist?.images?.[0]?.url ? (
             <Image

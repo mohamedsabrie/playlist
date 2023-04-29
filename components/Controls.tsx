@@ -60,27 +60,30 @@ function Controls() {
               className="text-primary h-16 cursor-pointer"
             />
           )}
-          {!!playlist && (
-            <div className="relative">
-              <EllipsisHorizontalIcon
-                onClick={() => setShow(true)}
-                className="h-10 text-gray-400 cursor-pointer"
-              />
-              <div
-                className="absolute left-0 top-0  min-w-[200px]    bg-dark2"
-                ref={optionsRef}
-              >
-                {show && (
-                  <ControlsOptions
-                    openCreatePlaylist={() => {
-                      openCreatePlaylist();
-                      setShow(false);
-                    }}
-                  />
-                )}
+          {!!playlist &&
+            (playlist?.name ? (
+              <div className="relative">
+                <EllipsisHorizontalIcon
+                  onClick={() => setShow(true)}
+                  className="h-10 text-gray-400 cursor-pointer"
+                />
+                <div
+                  className="absolute left-0 top-0  min-w-[200px]    bg-dark2"
+                  ref={optionsRef}
+                >
+                  {show && (
+                    <ControlsOptions
+                      openCreatePlaylist={() => {
+                        openCreatePlaylist();
+                        setShow(false);
+                      }}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            ) : (
+              <span className="text-white">{playlist?.tracks?.total} songs</span>
+            ))}
         </div>
         <SearchSong />
       </div>
