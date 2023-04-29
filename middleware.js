@@ -6,7 +6,7 @@ export async function middleware(req) {
     secret: process.env.JWT_SECRET,
   });
 
-  console.log(token)
+  console.log(token);
   const { pathname } = req.nextUrl;
   const PUBLIC_FILE = /\.(.*)$/;
   if (
@@ -18,9 +18,7 @@ export async function middleware(req) {
     pathname.startsWith("/login")
   ) {
     return NextResponse.next();
-  }
-
-  if (!token) {
+  } else if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }
