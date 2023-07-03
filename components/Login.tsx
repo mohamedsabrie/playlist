@@ -8,7 +8,7 @@ function Login({ providers }: any) {
       <div className="flex flex-col gap-y-5 items-center">
         {" "}
         <div>
-          <Image
+          <img
             height={200}
             width={200}
             src="/svgs/spotify-logo.png"

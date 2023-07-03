@@ -41,7 +41,7 @@ function Song({ track, order }: any) {
               order + 1
             )}
           </p>
-          <Image
+          <img
             onClick={playSong}
             alt="song-image"
             src={track?.album?.images?.[0]?.url}

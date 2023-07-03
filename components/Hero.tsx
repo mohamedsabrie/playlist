@@ -36,7 +36,7 @@ function Hero() {
       {playlist && playlist?.name ? (
         <div className="flex space-x-4">
           {playlist?.images?.[0]?.url ? (
-            <Image
+            <img
               width={192}
               height={192}
               alt="playlist-image"
@@ -70,7 +70,7 @@ function Hero() {
         <div className="flex overflow-x-auto scrollbar-hide   space-x-4">
           {playlists?.map((item: any) => {
             return item?.images?.[0]?.url ? (
-              <Image
+              <img
                 className="cursor-pointer"
                 onClick={() => setPlaylistId(item?.id)}
                 key={item?.id}

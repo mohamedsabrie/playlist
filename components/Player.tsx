@@ -115,7 +115,7 @@ function Player() {
     <div className="h-24 text-white  bg-gradient-to-t from-black to-gray-900 grid grid-cols-3 px-2 md:px-8 text-xs md:text-base">
       <div className="flex items-center space-x-3">
         {songInfo?.album?.images?.[0]?.url && (
-          <Image
+          <img
             height={50}
             width={50}
             className=""

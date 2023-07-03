@@ -12,7 +12,7 @@ function Header() {
       onClick={() => setIsOpen((prev) => !prev)}
       className="absolute top-5 right-5 bg-dark p-1 rounded-full flex items-center  gap-x-2 cursor-pointer"
     >
-      <Image
+      <img
         alt="userImage"
         className="rounded-full"
         width={30}
